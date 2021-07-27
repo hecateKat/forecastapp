@@ -1,51 +1,51 @@
 package com.kat.forecastapp.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kat.forecastapp.model.location.LocationModel;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONArray;
+import com.kat.forecastapp.dto.DayDto;
+import com.kat.forecastapp.dto.ForecastDto;
+import com.kat.forecastapp.service.ForecastService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class ForecastController {
 
-    private static final String api_key = "G9pAprFJYPJtCR1623GUFZgbKVNysUBc";
+    private ForecastService forecastService;
+
+    public ForecastController(ForecastService forecastService) {
+        this.forecastService = forecastService;
+    }
 
     @GetMapping("/cokolwiek")
     @ResponseBody
     public String showPostCode(@RequestParam String postcode) throws IOException {
-        LocationModel location = getLocation(postcode);
-//        String voivodeship =
-        return getLocation(postcode).getKey();
+        return forecastService.getLocation(postcode).getKey();
     }
 
-    public LocationModel getLocation(String postcode) throws IOException {
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        Request request = new Request.Builder()
-                .url("http://dataservice.accuweather.com/locations/v1/postalcodes/search?q=" + postcode + "&apikey=" + api_key)
-                .method("GET", null)
-                .build();
-        Response response = client.newCall(request).execute();
-
-        JSONArray array = new JSONArray(response.body().string());
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            LocationModel location = objectMapper.readValue(array.get(0).toString(), LocationModel.class);
-            return location;
-        } catch (IOException e) {
-            e.getStackTrace();
-        }
-        return null;
+    @GetMapping("/cokolwiek2")
+    @ResponseBody
+    public String showVoivodeship(@RequestParam String postcode) throws IOException {
+        return forecastService.getVoivodeship(postcode);
     }
 
+    @GetMapping("/cokolwiek3")
+    @ResponseBody
+    public ForecastDto showForecast(@RequestParam String postcode) throws IOException {
+        ForecastDto forecastDto = ForecastDto.builder()
+                .voivodeship(forecastService.getVoivodeship(postcode))
+                .build();
+
+        return forecastDto;
+    }
+
+    @GetMapping("/cokolwiek4")
+    @ResponseBody
+    public List<DayDto> showDailyWeatcher(@RequestParam String postcode) throws IOException {
+        return forecastService.getDailyWeather(postcode);
+    }
 
 }
