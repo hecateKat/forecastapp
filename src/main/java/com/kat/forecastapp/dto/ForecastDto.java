@@ -14,4 +14,6 @@ public class ForecastDto {
     private String voivodeship;
 
     private List<DayDto> days;
+
+    private int apiCallCounter;
 }

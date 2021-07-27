@@ -11,7 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DayDto {
 
-    private float minTemp;
+    private String date;
 
-    private float maxTemp;
+    private double minTemp;
+
+    private double maxTemp;
 }
