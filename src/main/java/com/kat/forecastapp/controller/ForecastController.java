@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.ServiceUnavailableException;
 import java.io.IOException;
 
-//TODO: testy integracyjne
-//TODO: wdrozenie produkcyjne
-
-
-
 @RestController
 public class ForecastController {
 
@@ -21,7 +16,7 @@ public class ForecastController {
         this.forecastService = forecastService;
     }
 
-    @GetMapping("/cokolwiek")
+    @GetMapping("/forecast")
     @ResponseBody
     @ExceptionHandler(ServiceUnavailableException.class)
     public ForecastDto showForecast(@RequestParam String postcode) throws IOException, ServiceUnavailableException {

@@ -23,7 +23,6 @@ import java.util.List;
 public class ForecastServiceImpl implements ForecastService {
 
     private static final String api_key = "ebXYLf8vwKFy5DWebf2wOxQWRGvAoozH&metric=true";
-//    private static final String api_key = "G9pAprFJYPJtCR1623GUFZgbKVNysUBc&metric=true";
 
     private static final String urlPostcode = "http://dataservice.accuweather.com/locations/v1/postalcodes/search";
     private static final String urlLocationKey = "http://dataservice.accuweather.com/forecasts/v1/daily/5day/";
