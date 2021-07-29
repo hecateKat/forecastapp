@@ -1,53 +1,44 @@
 package com.kat.forecastapp.controller;
 
-import com.kat.forecastapp.dto.DayDto;
-import com.kat.forecastapp.dto.ForecastDto;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
-import javax.naming.ServiceUnavailableException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@WebMvcTest(ForecastController.class)
 class ForecastControllerTest {
 
-    @Autowired
-    ForecastController forecastController;
-
     @MockBean
-    DayDto dayDto;
+    private ForecastController forecastController;
 
+    @Autowired
+    private MockMvc mockMvc;
+    
     @Test
-    void shouldGetDtoFromLublin() throws IOException, ServiceUnavailableException {
-        List<DayDto> days = new ArrayList<>();
-        days.add(dayDto);
-        ForecastDto forecastDto1 = ForecastDto.builder()
-                .voivodeship("Lublin")
-                .days(days)
-                .build();
-
-        ForecastDto forecastDto2 = forecastController.showForecast("20-570");
-
-        assertThat(forecastDto1.getVoivodeship()).isEqualTo(forecastDto2.getVoivodeship());
+    void shouldReturnStatusOk() throws Exception {
+        mockMvc.perform(get("/forecast?postcode=20-570")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     @Test
-    void shouldGetDtoFromOpole() throws IOException, ServiceUnavailableException {
-        List<DayDto> days = new ArrayList<>();
-        days.add(dayDto);
-        ForecastDto forecastDto1 = ForecastDto.builder()
-                .voivodeship("Opole")
-                .days(days)
-                .build();
-
-        ForecastDto forecastDto2 = forecastController.showForecast("45-020");
-
-        assertThat(forecastDto1.getVoivodeship()).isEqualTo(forecastDto2.getVoivodeship());
+    void shouldReturnStatusBadRequest() throws Exception {
+        mockMvc.perform(get("/forecast")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
     }
 }
