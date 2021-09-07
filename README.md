@@ -1,16 +1,13 @@
 # Forecast Application
 
-
-**Application made for process of recruiting for 9bits**
-
-Simple Java application that integrates with external API. 
+Simple Java application that integrates with external API.
 
 Endpoint: localhost:8080/forecast?postcode={postcode}
 
 
 ---
 
-## Api 
+## Api
 
 Application uses API from AccuWeather.
 
